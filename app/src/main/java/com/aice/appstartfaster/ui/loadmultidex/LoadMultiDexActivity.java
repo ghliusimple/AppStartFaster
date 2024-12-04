@@ -14,10 +14,12 @@ import androidx.multidex.MultiDex;
 public class LoadMultiDexActivity extends Activity {
     private ProgressDialog progressDialog;
     private static final String TAG = "LoadMultiDexActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -31,7 +33,8 @@ public class LoadMultiDexActivity extends Activity {
         thread.start();
         showLoadingDialog();
     }
-    private void loadMultiDex(){
+
+    private void loadMultiDex() {
         Log.d(TAG, "MultiDex.install 开始: ");
         long startTime = System.currentTimeMillis();
         MultiDex.install(LoadMultiDexActivity.this);
@@ -44,19 +47,21 @@ public class LoadMultiDexActivity extends Activity {
         Log.d(TAG, "MultiDex.install 结束，耗时: " + (System.currentTimeMillis() - startTime));
         aftetMultiDex();
     }
+
     private void aftetMultiDex() {
         deleteTempFile(this);
         //将这个进程杀死
         Log.d(TAG, "aftetMultiDex: ");
-        if (progressDialog!=null){
-            if (progressDialog.isShowing()){
+        if (progressDialog != null) {
+            if (progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            progressDialog=null;
+            progressDialog = null;
         }
         finish();
         Process.killProcess(Process.myPid());
     }
+
     private void deleteTempFile(Context context) {
         try {
             File file = new File(context.getCacheDir().getAbsolutePath(), "load_dex.tmp");
@@ -68,7 +73,8 @@ public class LoadMultiDexActivity extends Activity {
             th.printStackTrace();
         }
     }
-    private void showLoadingDialog(){
+
+    private void showLoadingDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -81,11 +87,11 @@ public class LoadMultiDexActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (progressDialog!=null){
-            if (progressDialog.isShowing()){
+        if (progressDialog != null) {
+            if (progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            progressDialog=null;
+            progressDialog = null;
         }
     }
 }

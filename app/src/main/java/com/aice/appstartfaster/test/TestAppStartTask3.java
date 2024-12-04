@@ -10,17 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-public class TestAppStartTaskTwo extends AppStartTask {
+public class TestAppStartTask3 extends AppStartTask {
 
     @Override
     public void run() {
+        Log.i(TestAppStartTask3.class.getName(), "start");
         long start = System.currentTimeMillis();
         try {
             Thread.sleep(300);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
-        Log.i("Task:","TestAppStartTaskTwo执行耗时: "+(System.currentTimeMillis()-start));
+        Log.i(TestAppStartTask3.class.getName(),
+                "TestAppStartTask3 finished time = " + (System.currentTimeMillis() - start));
     }
 
     @Override
@@ -31,7 +33,8 @@ public class TestAppStartTaskTwo extends AppStartTask {
     @Override
     public List<Class<? extends AppStartTask>> getDependsTaskList() {
         List<Class<? extends AppStartTask>> dependsTaskList = new ArrayList<>();
-        dependsTaskList.add(TestAppStartTaskOne.class);
+        dependsTaskList.add(TestAppStartTask1.class);
+        dependsTaskList.add(TestAppStartTask2.class);
         return dependsTaskList;
     }
 
@@ -39,6 +42,5 @@ public class TestAppStartTaskTwo extends AppStartTask {
     public boolean isRunOnMainThread() {
         return false;
     }
-
 
 }

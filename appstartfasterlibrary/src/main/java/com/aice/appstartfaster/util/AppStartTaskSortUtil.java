@@ -18,14 +18,17 @@ public class AppStartTaskSortUtil {
      * taskChildHashMap每个Task的孩子  （key= Class < ? extends AppStartTask>）
      * deque 入度为0的Task
      */
-    public static List<AppStartTask> getSortResult(List<AppStartTask> startTaskList, HashMap<Class<? extends AppStartTask>, AppStartTask> taskHashMap, HashMap<Class<? extends AppStartTask>, List<Class<? extends AppStartTask>>> taskChildHashMap) {
+    public static List<AppStartTask> getSortResult(List<AppStartTask> startTaskList, HashMap<Class<?
+            extends AppStartTask>, AppStartTask> taskHashMap, HashMap<Class<? extends AppStartTask>, List<Class<?
+            extends AppStartTask>>> taskChildHashMap) {
         List<AppStartTask> sortTaskList = new ArrayList<>();
         HashMap<Class<? extends AppStartTask>, TaskSortModel> taskIntegerHashMap = new HashMap<>();
         Deque<Class<? extends AppStartTask>> deque = new ArrayDeque<>();
         for (AppStartTask task : startTaskList) {
             if (!taskIntegerHashMap.containsKey(task.getClass())) {
                 taskHashMap.put(task.getClass(), task);
-                taskIntegerHashMap.put(task.getClass(), new TaskSortModel(task.getDependsTaskList() == null ? 0 : task.getDependsTaskList().size()));
+                taskIntegerHashMap.put(task.getClass(), new TaskSortModel(task.getDependsTaskList() == null ? 0 :
+                        task.getDependsTaskList().size()));
                 taskChildHashMap.put(task.getClass(), new ArrayList<Class<? extends AppStartTask>>());
                 //入度为0的队列
                 if (taskIntegerHashMap.get(task.getClass()).getIn() == 0) {

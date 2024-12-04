@@ -5,7 +5,6 @@ import android.os.Process;
 import com.aice.appstartfaster.dispatcher.AppStartTaskDispatcher;
 import com.aice.appstartfaster.task.AppStartTask;
 
-
 public class AppStartTaskRunnable implements Runnable {
     private AppStartTask mAppStartTask;
     private AppStartTaskDispatcher mAppStartTaskDispatcher;
@@ -17,7 +16,7 @@ public class AppStartTaskRunnable implements Runnable {
 
     @Override
     public void run() {
-        if (!mAppStartTask.isRunOnMainThread()){
+        if (!mAppStartTask.isRunOnMainThread()) {
             Process.setThreadPriority(mAppStartTask.priority());
         }
         mAppStartTask.waitToNotify();

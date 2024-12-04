@@ -7,16 +7,18 @@ import com.aice.appstartfaster.task.AppStartTask;
 import java.util.List;
 
 
-public class TestAppStartTaskOne extends AppStartTask {
+public class TestAppStartTask1 extends AppStartTask {
 
     @Override
     public void run() {
+        Log.i(TestAppStartTask1.class.getName(), "start");
         long start = System.currentTimeMillis();
         try {
             Thread.sleep(300);
-        }catch (Exception e){
+        } catch (Exception e) {
         }
-        Log.i("Task:","TestAppStartTaskOne执行耗时: "+(System.currentTimeMillis()-start));
+        Log.i(TestAppStartTask1.class.getName(),
+                "TestAppStartTask1 finished time = " + (System.currentTimeMillis() - start));
     }
 
     @Override

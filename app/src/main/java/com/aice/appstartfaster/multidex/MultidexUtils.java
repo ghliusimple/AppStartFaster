@@ -19,12 +19,14 @@ import java.util.regex.Pattern;
 import androidx.multidex.MultiDex;
 
 public class MultidexUtils {
-    private static final String TAG="MultidexUtils";
+    private static final String TAG = "MultidexUtils";
+
     //是否在主进程
-    public static boolean isMainProcess(Context context){
+    public static boolean isMainProcess(Context context) {
         return context.getPackageName().equals(getProcessName(context));
     }
-    public static String getProcessName(Context context){
+
+    public static String getProcessName(Context context) {
         ActivityManager activityManager = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
@@ -32,22 +34,24 @@ public class MultidexUtils {
 
         int myPid = Process.myPid();
 
-        if(appProcesses == null || appProcesses.size() == 0){
+        if (appProcesses == null || appProcesses.size() == 0) {
             return null;
         }
 
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             if (appProcess.processName.equals(context.getPackageName())) {
-                if (appProcess.pid == myPid){
+                if (appProcess.pid == myPid) {
                     return appProcess.processName;
                 }
             }
         }
         return null;
     }
-    public static boolean isVMMultidexCapable(){
+
+    public static boolean isVMMultidexCapable() {
         return isVMMultidexCapable(System.getProperty("java.vm.version"));
     }
+
     //MultiDex 拷出来的的方法，判断VM是否支持多dex
     public static boolean isVMMultidexCapable(String versionString) {
         boolean isMultidexCapable = false;
@@ -62,7 +66,8 @@ public class MultidexUtils {
                 }
             }
         }
-        Log.i("MultiDex", "VM with version " + versionString + (isMultidexCapable ? " has multidex support" : " does not have multidex support"));
+        Log.i("MultiDex", "VM with version " + versionString + (isMultidexCapable ? " has multidex support" : " does " +
+                "not have multidex support"));
         return isMultidexCapable;
     }
 
@@ -81,6 +86,7 @@ public class MultidexUtils {
         Log.d(TAG, "第二次 MultiDex.install 结束，耗时: " + (System.currentTimeMillis() - startTime));
         preNewActivity();
     }
+
     //创建一个临时文件，MultiDex install 成功后删除
     public static void newTempFile(Context context) {
         try {
@@ -93,8 +99,10 @@ public class MultidexUtils {
             th.printStackTrace();
         }
     }
+
     /**
      * 检查MultiDex是否安装完,通过判断临时文件是否被删除
+     *
      * @param context
      * @return
      */
@@ -113,9 +121,9 @@ public class MultidexUtils {
                     break;
                 }
             }
-            Log.d(TAG, "checkUntilLoadDexSuccess: 轮循结束，等待时间 " +(waitTime * i));
+            Log.d(TAG, "checkUntilLoadDexSuccess: 轮循结束，等待时间 " + (waitTime * i));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -7,37 +7,33 @@ import com.aice.appstartfaster.task.AppStartTask;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 
-public class TestAppStartTaskFive extends AppStartTask {
+public class TestAppStartTask4 extends AppStartTask {
 
     @Override
     public void run() {
+        Log.i(TestAppStartTask4.class.getName(), "start");
         long start = System.currentTimeMillis();
         try {
             Thread.sleep(300);
-        }catch (Exception e){
+        } catch (Exception e) {
+
         }
-        Log.i("Task:","TestAppStartTaskFive执行耗时: " + (System.currentTimeMillis() - start));
+        Log.i(TestAppStartTask4.class.getName(),
+                "TestAppStartTask4 finished time = " + (System.currentTimeMillis() - start));
     }
 
     @Override
     public List<Class<? extends AppStartTask>> getDependsTaskList() {
         List<Class<? extends AppStartTask>> dependsTaskList = new ArrayList<>();
-        dependsTaskList.add(TestAppStartTaskThree.class);
-        dependsTaskList.add(TestAppStartTaskTwo.class);
+        dependsTaskList.add(TestAppStartTask2.class);
+        dependsTaskList.add(TestAppStartTask3.class);
         return dependsTaskList;
-    }
-
-    @Override
-    public Executor runOnExecutor() {
-        return super.runOnExecutor();
     }
 
     @Override
     public boolean isRunOnMainThread() {
         return false;
     }
-
 
 }
