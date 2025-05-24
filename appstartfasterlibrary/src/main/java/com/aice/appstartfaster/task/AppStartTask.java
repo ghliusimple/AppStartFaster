@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
 public abstract class AppStartTask implements TaskInterface {
 
     // 当前Task依赖的Task数量（等父亲们执行完了，孩子才能执行），默认没有依赖
-    private CountDownLatch mDepends = new CountDownLatch(getDependsTaskList() == null ? 0 :
+    private final CountDownLatch mDepends = new CountDownLatch(getDependsTaskList() == null ? 0 :
             getDependsTaskList().size());
 
     //当前Task等待，让父亲Task先执行

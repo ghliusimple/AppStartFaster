@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit;
 public class TaskExecutorManager {
     private static volatile TaskExecutorManager sTaskExecutorManager;
     //CPU 密集型任务的线程池
-    private ThreadPoolExecutor mCPUThreadPoolExecutor;
+    private final ThreadPoolExecutor mCPUThreadPoolExecutor;
     // IO 密集型任务的线程池
-    private ExecutorService mIOThreadPoolExecutor;
+    private final ExecutorService mIOThreadPoolExecutor;
     //CPU 核数
     private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
     //线程池线程数
@@ -22,16 +22,6 @@ public class TaskExecutorManager {
     private static final int MAXIMUM_POOL_SIZE = CORE_POOL_SIZE;
     //线程空置回收时间
     private static final int KEEP_ALIVE_SECONDS = 5;
-    //线程池队列
-    private final BlockingQueue<Runnable> mPoolWorkQueue = new LinkedBlockingQueue<>();
-    // 这个是为了保障任务超出BlockingQueue的最大值，且线程池中的线程数已经达到MAXIMUM_POOL_SIZE时候，还有任务到来会采取任务拒绝策略，这里定义的策略就是
-    //再开一个缓存线程池去执行。当然BlockingQueue默认的最大值是int_max，所以理论上这里是用不到的
-    private final RejectedExecutionHandler mHandler = new RejectedExecutionHandler() {
-        @Override
-        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-            Executors.newCachedThreadPool().execute(r);
-        }
-    };
 
     public static TaskExecutorManager getInstance() {
         if (sTaskExecutorManager == null) {
@@ -46,6 +36,16 @@ public class TaskExecutorManager {
 
     //初始化线程池
     private TaskExecutorManager() {
+        //线程池队列
+        BlockingQueue<Runnable> mPoolWorkQueue = new LinkedBlockingQueue<>();
+        // 这个是为了保障任务超出BlockingQueue的最大值，且线程池中的线程数已经达到MAXIMUM_POOL_SIZE时候，还有任务到来会采取任务拒绝策略，这里定义的策略就是
+        //再开一个缓存线程池去执行。当然BlockingQueue默认的最大值是int_max，所以理论上这里是用不到的
+        RejectedExecutionHandler mHandler = new RejectedExecutionHandler() {
+            @Override
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+                Executors.newCachedThreadPool().execute(r);
+            }
+        };
         mCPUThreadPoolExecutor = new ThreadPoolExecutor(
                 CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,
                 mPoolWorkQueue, Executors.defaultThreadFactory(), mHandler);

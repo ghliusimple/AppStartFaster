@@ -6,8 +6,8 @@ import com.aice.appstartfaster.dispatcher.AppStartTaskDispatcher;
 import com.aice.appstartfaster.task.AppStartTask;
 
 public class AppStartTaskRunnable implements Runnable {
-    private AppStartTask mAppStartTask;
-    private AppStartTaskDispatcher mAppStartTaskDispatcher;
+    private final AppStartTask mAppStartTask;
+    private final AppStartTaskDispatcher mAppStartTaskDispatcher;
 
     public AppStartTaskRunnable(AppStartTask appStartTask, AppStartTaskDispatcher appStartTaskDispatcher) {
         this.mAppStartTask = appStartTask;

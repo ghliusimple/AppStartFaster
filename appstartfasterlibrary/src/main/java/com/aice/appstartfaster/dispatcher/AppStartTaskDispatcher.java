@@ -19,23 +19,23 @@ public class AppStartTaskDispatcher {
     //所有任务需要等待的时间
     private static final int WAITING_TIME = 10000;
     //存放每个Task  （key= Class < ? extends AppStartTask>）
-    private HashMap<Class<? extends AppStartTask>, AppStartTask> mTaskHashMap;
+    private final HashMap<Class<? extends AppStartTask>, AppStartTask> mTaskHashMap;
     //每个Task的孩子 （key= Class < ? extends AppStartTask>）
-    private HashMap<Class<? extends AppStartTask>, List<Class<? extends AppStartTask>>> mTaskChildHashMap;
+    private final HashMap<Class<? extends AppStartTask>, List<Class<? extends AppStartTask>>> mTaskChildHashMap;
     //通过Add添加进来的所有任务
-    private List<AppStartTask> mStartTaskList;
+    private final List<AppStartTask> mStartTaskList;
     //拓扑排序后的所有任务
     private List<AppStartTask> mSortTaskList;
     //拓扑排序后的主线程的任务
-    private List<AppStartTask> mSortMainThreadTaskList;
+    private final List<AppStartTask> mSortMainThreadTaskList;
     //拓扑排序后的子线程的任务
-    private List<AppStartTask> mSortThreadPoolTaskList;
+    private final List<AppStartTask> mSortThreadPoolTaskList;
     //需要等待的任务总数，用于阻塞
     private CountDownLatch mCountDownLatch;
     //需要等待的任务总数，用于CountDownLatch
-    private AtomicInteger mNeedWaitCount;
+    private final AtomicInteger mNeedWaitCount;
     //所有的任务开始时间，结束时间
-    private long mStartTime, mFinishTime;
+    private long mStartTime;
     //所有阻塞任务的总超时时间
     private long mAllTaskWaitTimeOut;
     private boolean isShowLog;
@@ -128,7 +128,7 @@ public class AppStartTaskDispatcher {
     //通知Children一个前置任务已完成
     public void setNotifyChildren(AppStartTask appStartTask) {
         List<Class<? extends AppStartTask>> arrayList = mTaskChildHashMap.get(appStartTask.getClass());
-        if (arrayList != null && arrayList.size() > 0) {
+        if (arrayList != null && !arrayList.isEmpty()) {
             for (Class<? extends AppStartTask> aclass : arrayList) {
                 mTaskHashMap.get(aclass).Notify();
             }
@@ -159,7 +159,7 @@ public class AppStartTaskDispatcher {
                 mAllTaskWaitTimeOut = WAITING_TIME;
             }
             mCountDownLatch.await(mAllTaskWaitTimeOut, TimeUnit.MILLISECONDS);
-            mFinishTime = System.currentTimeMillis() - mStartTime;
+            long mFinishTime = System.currentTimeMillis() - mStartTime;
             AppStartTaskLogUtil.showLog(isShowLog, "启动耗时：" + mFinishTime);
         } catch (InterruptedException e) {
             e.printStackTrace();

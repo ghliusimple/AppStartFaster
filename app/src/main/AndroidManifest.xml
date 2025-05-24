@@ -10,12 +10,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.loadmultidex.LoadMultiDexActivity"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:process=":multi_dex"
-            android:theme="@style/MyStartAppTheme"></activity>
         <activity android:name=".ui.MainActivity"></activity>
         <activity
             android:name=".ui.splash.SplashActivity"
